@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<title>{% block title %}{% endblock %} - crm</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='style/bootstrap.min.css') }}">
+<body>
+  <header>
+    <nav class="navbar navbar-expand-lg bg-primary" data-bs-theme="dark">
+      <div class="container-fluid">
+        <a class="navbar-brand" href="{{ url_for('dashboard.index') }}">RM2</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarColor01" aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+    </button>
+        <div class="collapse navbar-collapse" id="navbarColor01">
+          <ul class="navbar-nav me-auto">
+            <li class="nav-item"><a class="nav-link active" href="{{ url_for('dashboard.cotizaciones') }}">Cotizaciones</a></li>
+            <li class="nav-item"><a class="nav-link active" href="/clientes/pag/1/">Clientes</a></li>
+            <li class="nav-item"><a class="nav-link active" href="/productos/pag/1/">Productos</a></li>
+            <li class="nav-item"><a class="nav-link active" href="{{ url_for('dashboard.usuarios') }}">Usuarios</a></li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+  </header>
+  <section>
+    <div class="container">
+      {% block content %} {% endblock %}
+    </div>
+    <script type="text/javascript" src="{{ url_for('static', filename='scripts/bootstrap.bundle.min.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='scripts/jquery-3.7.1.min.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='scripts/popper.min.js') }}"></script>
+  </section>
+</body>

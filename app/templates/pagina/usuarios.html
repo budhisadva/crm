@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Usuarios
+{% endblock %}
+
+{% block content %}
+<h2>Usuarios</h2>
+<div class="clientes">
+  <div class="client-left">
+    <input type="text" name="" value="" placeholder="Buscar">
+    <table>
+      <tr>
+        <th>Nombre</th>
+        <th>Apellido paterno</th>
+        <th>Apellido materno</th>
+      </tr>
+      {% for u in usuarios %}
+      <tr>
+        <td>{{ u.nombre }}</td>
+        <td>{{ u.paterno }}</td>
+        <td>{{ u.materno }}</td>
+      </tr>
+      {% endfor %}
+    </table>
+    <button type="button" name="button"><a href="{{ url_for('dashboard.nuevoUsuario') }}">Nuevo</a></button>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Cotizaciones
+{% endblock %}
+
+{% block content %}
+<div class="row">
+  <div class="col-4">
+    <h2>Cotizaciones</h2>
+  </div>
+  <div class="col-8 d-flex justify-content-end">
+    <button type="button" class="btn btn-primary"><a href="{{ url_for('dashboard.nuevaCotizacion') }}" class="text-light">Nuevo</a></button>
+  </div>
+</div>
+<div class="row">
+  <div class="col-12">
+    <table class="table table-hover table-striped table-bordered">
+      <thead>
+        <tr>
+          <th scope="col">Id</th>
+          <th scope="col">Folio</th>
+          <th scope="col">Fecha creacion</th>
+          <th scope="col">Marca</th>
+          <th scope="col">Mercado</th>
+          <th scope="col">Cliente</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for c in cotizaciones %}
+        <tr>
+          <th scope="row">{{c.id}}</th>
+          <td>{{c.folio}}</td>
+          <td>{{c.fechaCreacion}}</td>
+          <td>{{c.marcaId}}</td>
+          <td>{{c.mercadoId}}</td>
+          <td>{{c.clienteId}}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}

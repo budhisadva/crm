@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Nuevo Usuario
+{% endblock %}
+
+{% block content %}
+<h2>Nuevo usuario</h2>
+<div class="usuarios">
+  <form class="" action="index.html" method="post">
+    <label for="">Nombre</label>
+    <input type="text" name="" value="">
+    <label for="">Apellido paterno</label>
+    <input type="text" name="" value="">
+    <label for="">Apellido materno</label>
+    <input type="text" name="" value="">
+    <label for="">Nivel</label>
+    <select class="" name="">
+      <option value=""></option>
+      <option value="">Admnistracion</option>
+      <option value="">Normal</option>
+    </select>
+    <label for="">Activo</label>
+    <input type="checkbox" name="" value="">
+    <br>
+    <label for="">Contraseña</label>
+    <input type="password" name="" value="">
+  </form>
+  <button type="button" name="button"><a href="{{ url_for('dashboard.usuarios') }}">Regresar</a></button>
+</div>
+{% endblock %}
