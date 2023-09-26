@@ -70,12 +70,11 @@ def clientes(n):
 
 @bp.route('/add_clt', methods=['GET', 'POST'])
 def nuevoCliente():
-    db, c = get_db()
     if request.method == 'GET':
         tipos = selectAll(tabla='TipoCliente')
         mercados = selectAll(tabla='Mercado')
         return render_template('pagina/add_clt.html', tipos=tipos, mercados=mercados)
-    if request.method == 'POST':
+    else:
         insert(tabla='Cliente', datos=request.form.copy())
         flash('Cliente agregado correctamente')
         return redirect('/clientes/pag/1/')
@@ -88,7 +87,7 @@ def editaCliente(id):
         tipos = selectAll('TipoCliente')
         mercados = selectAll('Mercado')
         return render_template('pagina/edit_clt.html', cliente=cliente, tipos=tipos, mercados=mercados)
-    if request.method == 'POST':
+    else:
         update(tabla='Cliente', id=id, datos=request.form.copy())
         flash('Cliente actualizado correctamente')
         return redirect('/clientes/pag/1/')
@@ -103,7 +102,6 @@ def borraCliente(id):
 # --------------------------------------------------
 @bp.route('/productos/pag/<int:n>/', methods=['GET'])
 def productos(n):
-    db, c = get_db()
     if len(request.args) == 0:
         productos = selectAllPaginado(tabla='Producto', pag=n)
         return render_template('pagina/productos.html', productos=productos, pag=n)
@@ -111,62 +109,53 @@ def productos(n):
         if request.args.get('busqueda') == '':
             return redirect(f'/productos/pag/{n}')
         productos = selectAllBusqueda(tabla='Producto', arg=request.args.get('busqueda'), atr='clave', ord=True)
-    return render_template('pagina/productos.html', productos = productos, pag=n)
+    return render_template('pagina/productos.html', productos=productos, pag=n)
 
 @bp.route('/add_pdt', methods=['GET', 'POST'])
 def nuevoProducto():
-    db, c = get_db()
-    if request.method == 'POST':
-        p = Producto()
-        p.setByRequest(request.form)
-        col, val = p.insertQuery()
-        c.execute('insert into Producto ({}) values ({})'.format(col, val))
-        db.commit()
-        flash('Producto agregado correctamente')
-        return redirect('productos/pag/1/')
-    elif request.method == 'GET':
-        c.execute('select * from Marca')
-        marcas = c.fetchall()
+    if request.method == 'GET':
+        marcas = selectAll('Marca')
         return render_template('pagina/add_pdt.html', marcas=marcas)
     else:
-        return render_template('pagina/index.html')
+        insert(tabla='Producto', datos=request.form.copy())
+        flash('Producto agregado correctamente')
+        return redirect('productos/pag/1/')
+
 
 @bp.route('/edit_pdt/<string:id>', methods=['GET', 'POST'])
 def editaProducto(id):
-    db, c = get_db()
-    c.execute('select * from Producto where id = {}'.format(id))
-    producto = c.fetchone()
-    c.execute('select * from Marca')
-    marcas = c.fetchall()
-    db.commit()
+    producto = selectId(tabla='Producto', atr='id', val=id)
+    marcas = selectAll('Marca')
     if request.method == 'GET':
         return render_template('pagina/edit_pdt.html', id=id, producto=producto, marcas=marcas)
-    elif request.method == 'POST':
-        p = Producto()
-        p.setByRequest(request.form)
-        s = p.updateQuery()
-        c.execute("update Producto set {} where id = {}".format(s, id))
-        db.commit()
+    else:
+        update(tabla='Producto', id=id, datos=request.form.copy())
         flash('Producto actualizado correctamente')
         return redirect('/productos/pag/1/')
 
 @bp.route('/delete_pdt/<string:id>', methods=['GET'])
 def borraProducto(id):
-    db, c = get_db()
-    c.execute('delete from Producto where id = {}'.format(id))
-    db.commit()
+    delete(tabla='Producto', id=id)
     flash('Producto eliminado correctamente')
     return redirect('/productos/pag/1/')
 # -----------------------------------------------------#
-# -----------------------------------------------------#
+# -----------------Usuario-----------------------------#
 # -----------------------------------------------------#
 @bp.route('/usuarios', methods=['GET'])
 def usuarios():
-    db, c = get_db()
-    c.execute('select * from Usuario')
-    usuarios = c.fetchall()
+    usuarios = selectAll('Usuario')
     return render_template('pagina/usuarios.html', usuarios=usuarios)
 
-@bp.route('/usua-nuevo', methods=['GET'])
+@bp.route('/add_usr', methods=['GET'])
 def nuevoUsuario():
     return render_template('pagina/form-usua.html')
+
+@bp.route('/edit_usr/<string:id>/')
+def editaUsuario(arg):
+    return redirect(url_for('dashboard.usuarios'))
+
+@bp.route('delete_usr/<string:id>/')
+def borraUsuario(id):
+    delete(tabla='Usuario', id=id)
+    flash('Usuario eliminado correctamente')
+    return redirect(url_for('dashboard.usuarios'))
