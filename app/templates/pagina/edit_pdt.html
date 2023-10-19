@@ -10,11 +10,11 @@ Editar Producto
     <h2>Editar: {{producto.clave}}</h2>
   </div>
   <div class="col-4 d-flex justify-content-end">
-    <button type="button" class="btn btn-primary"><a href="/productos/pag/1/" class="text-light">Regresar</a></button>
+    <button type="button" class="btn btn-primary"><a href="{{ url_for('dashboard.productos', n=1) }}" class="text-light">Regresar</a></button>
   </div>
 </div>
-<div class="card card-body col-10 mx-auto">
-  <form action="/edit_pdt/{{id}}" method="POST">
+<div class="card card-body col-10 mx-auto mt-2">
+  <form action="{{url_for('dashboard.editaProducto', id=id)}}" method="POST">
     <fieldset>
       <div class="form-group row">
         <label class="col-sm-2 col-form-label">Clave</label>

@@ -10,11 +10,11 @@ Nuevo Producto
     <h2>Nuevo producto</h2>
   </div>
   <div class="col-4 d-flex justify-content-end">
-    <button type="button" class="btn btn-primary"><a href="/productos/pag/1/" class="text-light">Regresar</a></button>
+    <button type="button" class="btn btn-primary"><a href="{{ url_for('dashboard.productos', n=1) }}" class="text-light">Regresar</a></button>
   </div>
 </div>
-<div class="card card-body col-10 mx-auto">
-  <form action="/add_pdt" method="POST">
+<div class="card card-body col-10 mx-auto mt-2">
+  <form action="{{ url_for('dashboard.nuevoProducto') }}" method="POST">
     <fieldset>
       <legend>Datos del Producto</legend>
       <div class="form-group row">

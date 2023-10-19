@@ -13,93 +13,16 @@ Nueva Cotizacion
     <button type="button" class="btn btn-primary"><a href="{{ url_for('dashboard.cotizaciones') }}" class="text-light">Regresar</a></button>
   </div>
 </div>
-<div class="card card-body col-10 mx-auto row">
-  <!-- ----------------------------------------- -->
-  {% if encontrado %}
-  <form action="/add_cot/" method="GET">
-    <fieldset>
-      <div class="form-group">
-        <label class="form-label mt-4">Selecciona al cliente: </label>
-        <select class="form-select" name="cliente">
-          <option></option>
-          {% for c in clientes %}
-          <option value="{{c.id}}">{{c.nombre}}</option>
-          {% endfor %}
-        </select>
-      </div>
-      <button class="btn btn-primary my-2 my-sm-0" type="submit">Enviar</button>
-    </fieldset>
-  </form>
-  {% elif seleccionado %}
-  <legend>Datos del cliente</legend>
-  <div class="form-group row">
-    <label class="col-sm-2 col-form-label">Nombre</label>
-    <div class="col-sm-10">
-      <input type="text" class="form-control-plaintext" value="{{cliente.nombre}}" disabled>
-    </div>
-  </div>
-  <div class="form-group row">
-    <label class="col-sm-2 col-form-label">Organizacion</label>
-    <div class="col-sm-10">
-      <input type="text" class="form-control-plaintext" value="{{cliente.organizacion}}" disabled>
-    </div>
-  </div>
-  <div class="form-group row">
-    <label class="col-sm-2 col-form-label">Tipo</label>
-    <div class="col-sm-10">
-      <input type="text" class="form-control-plaintext" value="{{cliente.tipo}}" disabled>
-    </div>
-  </div>
-  <div class="form-group row">
-    <label class="col-sm-2 col-form-label">Telefono</label>
-    <div class="col-sm-10">
-      <input type="text" class="form-control-plaintext" value="{{cliente.telefono}}" disabled>
-    </div>
-  </div>
-  <div class="form-group row">
-    <label class="col-sm-2 col-form-label">Correo electronico</label>
-    <div class="col-sm-10">
-      <input type="text" class="form-control-plaintext" value="{{cliente.email}}" disabled>
-    </div>
-  </div>
-  <div class="form-group row">
-    <label class="col-sm-2 col-form-label">Puesto</label>
-    <div class="col-sm-10">
-      <input type="text" class="form-control-plaintext" value="{{cliente.puesto}}" disabled>
-    </div>
-  </div>
-  <div class="form-group row">
-    <label class="col-sm-2 col-form-label">Industria</label>
-    <div class="col-sm-10">
-      <input type="text" class="form-control-plaintext" value="{{cliente.industria}}" disabled>
-    </div>
-  </div>
-  {% else %}
-  <form action="/add_cot/" method="GET">
-    <fieldset>
-      <legend>Clientes</legend>
-      <div class="col-8 d-flex">
-        <input class="form-control me-sm-2" type="search" name="busqueda_clt">
-        <button class="btn btn-secondary my-2 my-sm-0" type="submit">
-          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
-            <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/>
-          </svg>
-        </button>
-      </div>
-    </fieldset>
-  </form>
-  {% endif %}
-  <!-- ----------------------------------------- -->
-</div>
+<!-- --------------------------------------------- -->
 <div class="card card-body col-10 mx-auto">
-  <form action="/add_cot/" method="POST">
+  <legend>Datos generales</legend>
+  <form action="{{ url_for('dashboard.nuevaCotizacion') }}" method="POST">
     <fieldset>
-      <legend>Datos generales</legend>
       <div class="form-group">
         <label class="form-label mt-4">Marca</label>
         <select class="form-select" name="marcaId">
           <option></option>
-          {% for m in marcas %}
+          {% for m in contexto['marcas'] %}
           <option value="{{m.id}}">{{m.nombre}}</option>
           {% endfor %}
         </select>
@@ -116,7 +39,7 @@ Nueva Cotizacion
         <label class="form-label mt-4">Mercado</label>
         <select class="form-select" name="mercadoId">
           <option></option>
-          {% for m in mercados %}
+          {% for m in contexto['mercados'] %}
           <option value="{{m.id}}">{{m.nombre}}</option>
           {% endfor %}
         </select>
@@ -124,12 +47,10 @@ Nueva Cotizacion
       <div class="form-group row">
         <label class="col-sm-2 col-form-label">Version</label>
         <div class="col-sm-10">
-          <input type="text" class="form-control-plaintext" name="version" placeholder="Version" value="1" disabled>
+          <input type="text" class="form-control-plaintext" placeholder="Version" value="1" disabled>
         </div>
       </div>
-      {% if seleccionado %}
-      <button class="btn btn-primary my-2 my-sm-0" type="submit" name="clienteId" value="{{cliente.id}}">Enviar</button>
-      {% endif %}
+      <button class="btn btn-primary my-2 my-sm-0" type="submit">Enviar</button>
     </fieldset>
   </form>
 </div>

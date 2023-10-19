@@ -49,7 +49,5 @@ datos = [
     "insert into Usuario (nombre, paterno, materno, admin) values ('Juana Berenice', 'Vargas', 'Abarca', false)",
     "insert into Usuario (nombre, paterno, materno, admin) values ('Diana Elizabeth', 'Lucas', 'Padilla', false)",
     "insert into Usuario (nombre, paterno, materno, admin) values ('Fernando', 'Vargas', 'Abarca', false)",
-    "insert into Usuario (nombre, paterno, materno, admin) values ('Isaias', 'Velazquez', 'Cortes', true)",
     "insert into Usuario (nombre, paterno, materno, admin) values ('Juan Guillermo', 'Torres', 'Ortiz', true)",
-    "insert into Usuario (nombre, paterno, materno, admin) values ('Miguel Angel', 'Hernández', '---', false)",
 ]

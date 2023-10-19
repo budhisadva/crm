@@ -5,16 +5,16 @@ Nuevo cliente
 {% endblock %}
 
 {% block content %}
-<div class="row">
+<div class="row mb-2">
   <div class="col-8">
     <h2>Nuevo cliente</h2>
   </div>
   <div class="col-4 d-flex justify-content-end">
-    <button type="button" class="btn btn-primary"><a href="/clientes/pag/1/" class="text-light">Regresar</a></button>
+    <button type="button" class="btn btn-primary"><a href="{{ url_for('dashboard.clientes', n=1) }}" class="text-light">Regresar</a></button>
   </div>
 </div>
 <div class="card card-body col-10 mx-auto">
-  <form action="/add_clt" method="POST">
+  <form action="{{ url_for('dashboard.nuevoCliente') }}" method="POST">
     <fieldset>
       <legend>Datos del cliente</legend>
       <div class="form-group row">
@@ -29,7 +29,7 @@ Nuevo cliente
           <input type="text" class="form-control-plaintext" name="organizacion" placeholder="Organizacion">
         </div>
       </div>
-      <div class="form-group">
+      <div class="form-group row">
         <label class="form-label mt-4">Tipo de cliente</label>
         <select class="form-select" name="tipo">
           <option></option>

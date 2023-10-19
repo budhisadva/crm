@@ -13,12 +13,12 @@ Productos
   {% endfor %}
 {% endif %}
 {% endwith %}
-<div class="row">
+<div class="row mb-2">
   <div class="col-4">
     <h2>Productos</h2>
   </div>
   <div class="col-8 d-flex justify-content-between">
-    <form class="d-flex">
+    <form class="d-flex" action="{{ url_for('dashboard.productos', n=pag) }}" method="GET">
       <input class="form-control me-sm-2" type="search" name="busqueda">
       <button class="btn btn-secondary my-2 my-sm-0" type="submit">
         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
@@ -31,7 +31,7 @@ Productos
 </div>
 <div class="row">
   <div class="col-12">
-    <table class="table table-hover table-striped table-bordered">
+    <table class="table table-sm table-hover table-striped table-bordered">
       <thead>
         <tr>
           <th>Id</th>

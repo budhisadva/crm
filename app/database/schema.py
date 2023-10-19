@@ -1,4 +1,13 @@
 instructions = [
+    'SET FOREIGN_KEY_CHECKS = 0;',
+    'drop table if exists TipoCliente;',
+    'drop table if exists Mercado;',
+    'drop table if exists Marca;',
+    'drop table if exists Usuario;',
+    'drop table if exists Producto;',
+    'drop table if exists Cliente;',
+    'drop table if exists Cotizacion;',
+    'SET FOREIGN_KEY_CHECKS = 1;',
     """
     create table TipoCliente(
         id int not null auto_increment,
