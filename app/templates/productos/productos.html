@@ -18,7 +18,7 @@ Productos
     <h2>Productos</h2>
   </div>
   <div class="col-8 d-flex justify-content-between">
-    <form class="d-flex" action="{{ url_for('dashboard.productos', n=pag) }}" method="GET">
+    <form class="d-flex" action="{{ url_for('dashboard.productos', n=n) }}" method="GET">
       <input class="form-control me-sm-2" type="search" name="busqueda">
       <button class="btn btn-secondary my-2 my-sm-0" type="submit">
         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
@@ -76,27 +76,5 @@ Productos
     </table>
   </div>
 </div>
-<div class="row">
-  <div class="col-12 d-flex justify-content-center">
-    <ul class="pagination pagination-lg">
-      {% if pag <= 1 %}
-      <li class="page-item disabled">
-        <a class="page-link" href="/productos/pag/{{pag-1}}">&laquo;</a>
-      </li>
-      {% else %}
-      <li class="page-item">
-        <a class="page-link" href="/productos/pag/{{pag-1}}">&laquo;</a>
-      </li>
-      {% endif %}
-      {% for i in range(pag, pag+5, 1)%}
-        <li class="page-item active">
-          <a class="page-link" href="/productos/pag/{{i}}">{{i}}</a>
-        </li>
-      {% endfor %}
-      <li class="page-item">
-        <a class="page-link" href="/productos/pag/{{pag+1}}">&raquo;</a>
-      </li>
-    </ul>
-  </div>
-</div>
+{% block paginado %}{% endblock %}
 {% endblock %}

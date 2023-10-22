@@ -6,7 +6,7 @@ def selectAll(tabla):
     return c.fetchall()
 
 def selectAllPaginado(tabla, pag):
-    tam = 10
+    tam = 15
     inf = (pag-1)*tam
     db, c = get_db()
     c.execute(f'select * from {tabla} limit {inf}, {tam}')
@@ -25,7 +25,12 @@ def selectId(tabla, atr, val):
     db, c = get_db()
     c.execute(f'select * from {tabla} where {atr} = {val}')
     return c.fetchone()
-# insert
+
+def selectCount(tabla, campo='id'):
+    db, c = get_db()
+    c.execute(f'select count({campo}) as total from {tabla}')
+    return c.fetchone()
+# insert---------------------------
 def insert(tabla, datos):
     db, c = get_db()
     llv=list(datos)

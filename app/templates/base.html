@@ -2,7 +2,10 @@
 <html lang="es" dir="ltr">
   <head>
     <meta charset="utf-8">
-    <link rel="stylesheet" href="{{ url_for('static', filename='style/bootstrap.css') }}">
+    <link defer rel="stylesheet" href="{{ url_for('static', filename='styles/bootstrap.css') }}">
+    <script defer type="text/javascript" src="{{ url_for('static', filename='scripts/bootstrap.bundle.js') }}"></script>
+    <script defer type="text/javascript" src="{{ url_for('static', filename='scripts/jquery-3.7.1.min.js') }}"></script>
+    <script defer type="text/javascript" src="{{ url_for('static', filename='scripts/popper.min.js') }}"></script>
     <title>{% block title %}{% endblock %} - crm</title>
   </head>
   <body>
@@ -16,10 +19,16 @@
           <div class="collapse navbar-collapse" id="navbarColor01">
             <ul class="navbar-nav me-auto">
               <li class="nav-item"><a class="nav-link active" href="{{ url_for('dashboard.cotizaciones') }}">Cotizaciones</a></li>
-              <li class="nav-item"><a class="nav-link active" href="{{ url_for('dashboard.clientes', n=1) }}">Clientes</a></li>
-              <li class="nav-item"><a class="nav-link active" href="{{ url_for('dashboard.productos', n=1) }}">Productos</a></li>
               <li class="nav-item"><a class="nav-link active" href="{{ url_for('dashboard.inventario') }}">Inventario</a></li>
-              <li class="nav-item"><a class="nav-link active" href="{{ url_for('dashboard.usuarios') }}">Usuarios</a></li>
+              <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Tablas</a>
+                <div class="dropdown-menu">
+                  <a class="dropdown-item" href="{{ url_for('dashboard.clientes', n=1) }}">Clientes</a>
+                  <a class="dropdown-item" href="{{ url_for('dashboard.productos', n=1) }}">Productos</a>
+                  <div class="dropdown-divider"></div>
+                    <a class="dropdown-item" href="{{ url_for('dashboard.usuarios') }}">Usuarios</a>
+                  </div>
+              </li>
             </ul>
           </div>
         </div>
@@ -29,9 +38,6 @@
       <div class="container mt-2 mb-1">
         {% block content %}{% endblock %}
       </div>
-      <script type="text/javascript" src="{{ url_for('static', filename='scripts/bootstrap.bundle.min.js') }}"></script>
-      <script type="text/javascript" src="{{ url_for('static', filename='scripts/jquery-3.7.1.min.js') }}"></script>
-      <script type="text/javascript" src="{{ url_for('static', filename='scripts/popper.min.js') }}"></script>
     </section>
   </body>
 </html>

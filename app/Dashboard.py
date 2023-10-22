@@ -17,15 +17,21 @@ def index():
 @bp.route('/clientes/pag/<int:n>/', methods=['GET'])
 def clientes(n):
     contexto = dict()
-    contexto['pag'] = n
+    contexto['n'] = n
+    if n < 1:
+        return redirect(url_for('dashboard.clientes', n=1))
     if len(request.args) == 0:
         contexto['clientes'] = selectAllPaginado(tabla='Cliente', pag=n)
+        contexto['total'] = selectCount('Cliente')['total']
+        t = contexto['total']
+        contexto['paginas'] = int((t - (t % 15))/15)
     else:
         if request.args.get('busqueda') == '':
             return redirect(url_for('dashboard.clientes', n=n))
         else:
             contexto['clientes'] = selectAllBusqueda(tabla='Cliente', arg=request.args.get('busqueda'), atr='nombre', ord=True)
-    return render_template('pagina/clientes.html', **contexto)
+            return render_template('clientes/clientes.html', **contexto)
+    return render_template('clientes/paginado.html', **contexto)
 
 
 @bp.route('/add_clt/', methods=['GET', 'POST'])
@@ -34,7 +40,7 @@ def nuevoCliente():
     if request.method == 'GET':
         contexto['tipos'] = selectAll(tabla='TipoCliente')
         contexto['mercados'] = selectAll(tabla='Mercado')
-        return render_template('pagina/add_clt.html', **contexto)
+        return render_template('clientes/add_clt.html', **contexto)
     else:
         # insert(tabla='Cliente', datos=request.form.copy())
         flash('Cliente agregado correctamente')
@@ -47,7 +53,7 @@ def editaCliente(id):
         contexto['cliente'] = selectId(tabla='Cliente', atr='id', val=id)
         contexto['tipos'] = selectAll('TipoCliente')
         contexto['mercados'] = selectAll('Mercado')
-        return render_template('pagina/edit_clt.html', **contexto)
+        return render_template('clientes/edit_clt.html', **contexto)
     else:
         # update(tabla='Cliente', id=id, datos=request.form.copy())
         flash('Cliente actualizado correctamente')
@@ -64,21 +70,28 @@ def borraCliente(id):
 @bp.route('/productos/pag/<int:n>/', methods=['GET'])
 def productos(n):
     contexto = dict()
-    contexto['pag'] = n
+    contexto['n'] = n
+    if n < 1:
+        return redirect(url_for('dashboard.clientes', n=1))
     if len(request.args) == 0:
         contexto['productos'] = selectAllPaginado(tabla='Producto', pag=n)
+        contexto['total'] = selectCount('Producto')['total']
+        t = contexto['total']
+        contexto['paginas'] = int((t - (t % 15))/15)
     else:
         if request.args.get('busqueda') == '':
             return redirect(url_for('dashboard.productos', n=n))
-        contexto['productos'] = selectAllBusqueda(tabla='Producto', arg=request.args.get('busqueda'), atr='clave', ord=True)
-    return render_template('pagina/productos.html', **contexto)
+        else:
+            contexto['productos'] = selectAllBusqueda(tabla='Producto', arg=request.args.get('busqueda'), atr='clave', ord=True)
+            return render_template('productos/productos.html', **contexto)
+    return render_template('productos/paginado.html', **contexto)
 
 @bp.route('/add_pdt/', methods=['GET', 'POST'])
 def nuevoProducto():
     contexto = dict()
     if request.method == 'GET':
         contexto['marcas'] = selectAll('Marca')
-        return render_template('pagina/add_pdt.html', **contexto)
+        return render_template('productos/add_pdt.html', **contexto)
     else:
         # insert(tabla='Producto', datos=request.form.copy())
         flash('Producto agregado correctamente')
@@ -92,7 +105,7 @@ def editaProducto(id):
         contexto['id'] = id
         contexto['producto'] = selectId(tabla='Producto', atr='id', val=id)
         contexto['marcas'] = selectAll('Marca')
-        return render_template('pagina/edit_pdt.html',**contexto)
+        return render_template('productos/edit_pdt.html',**contexto)
     else:
         # update(tabla='Producto', id=id, datos=request.form.copy())
         flash('Producto actualizado correctamente')
@@ -136,11 +149,16 @@ def borraUsuario(id):
 @bp.route('/inventario/', methods=['GET'])
 def inventario():
     contexto = dict()
-    if len(request.args) == 0:
-        contexto['productos'] = selectAll('Producto')
+    if len(request.args) < 2:
+        pass
     else:
-        print(request.args)
+        if request.args.get('busqueda') != '':
+            contexto['productos'] = selectAllBusqueda(tabla='Producto', atr=request.args.get('categoria'), arg=request.args.get('busqueda'), ord=True)
+        else:
+            return redirect(url_for('dashboard.inventario'))
     return render_template('inventario/inventario.html', **contexto)
+
+@bp.route('', methods=['GET'])
 
 # --------------------------------------------------
 # ------------------Cotizaciones--------------------
