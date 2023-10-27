@@ -1,43 +1,104 @@
 {% extends 'base.html' %}
 
-{% block title %}
-Inventario
-{% endblock %}
+{% block title %}Inventario{% endblock %}
+{% block script %}<script defer type="text/javascript" src="{{ url_for('static', filename='scripts/inventario.js') }}"></script>{% endblock %}
+{% block style %}<link rel="stylesheet" href="{{ url_for('static', filename='styles/style.css') }}">{% endblock %}
 
 {% block content %}
 <div class="row">
   <div class="col-12 d-flex flex-row justify-content-between">
-    <h2>Existencias</h2>
+    <h2>Consulta de inventario</h2>
     <div class="">
-      <button type="button" class="btn btn-primary"><a href="#" class="text-light">Entradas</a></button>
-      <button type="button" class="btn btn-primary"><a href="#" class="text-light">Salidas</a></button>
+      <button type="button" class="btn btn-primary"><a href="{{ url_for('dashboard.nuevaEntrada')}}" class="text-light">Nueva entrada</a></button>
+      <button type="button" class="btn btn-primary">Nueva salida</button>
     </div>
   </div>
-  <div class="card row mt-2 d-flex justify-content-center pb-2">
-    <h3>Buscar producto</h3>
-    <form class="form-group d-flex justify-content-around align-items-stretch" action="{{ url_for('dashboard.inventario') }}" method="GET">
-      <div class="d-flex flex-row m-4 w-75">
-        <input class="form-control me-sm-2" type="search" name="busqueda">
-        <button class="btn btn-secondary my-2 my-sm-0" type="submit">
-          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16"><path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/></svg>
-        </button>
-      </div>
-      <div class="form-group">
-        <label class="form-label mt-4">Buscar por<span class="text-body-secondary"></span></label>
-        <select class="form-select" name="categoria">
-          <option value="clave">Clave</option>
-          <option value="modelo">Modelo</option>
-        </select>
-      </div>
-    </form>
+  <div id="menu" class="card row mt-2 d-flex justify-content-center pb-2">
+    <p>Tipo de reporte</p>
+    <div class="tabs">
+      <button type="button" class="btn" data-tab="entradas" id="btn1">Entradas</button>
+      <button type="button" class="btn" data-tab="salidas">Salidas</button>
+      <button type="button" class="btn" data-tab="fisico">Físico</button>
+    </div>
+    <div class="tab card mt-2" id="entradas">
+      <form action="{{ url_for('dashboard.inventario') }}" method="POST" id="form-entradas">
+        <fieldset>
+          <legend>Entradas</legend>
+          <small class="form-text text-muted">Fecha de pedimiento</small>
+          <div class="form-group d-flex align-items-center">
+            <input class="form-check-input" type="checkbox" id="pedi">
+            <input type="date" class="form-control" id="pedi-ini" name="pedi-ini">
+            <span>A</span>
+            <input type="date" class="form-control" id="pedi-fin" name="pedi-fin">
+          </div>
+          <small class="form-text text-muted">Fecha de entrada</small>
+          <div class="form-group d-flex align-items-center">
+            <input class="form-check-input" type="checkbox" id="ent">
+            <input type="date" class="form-control" id="ent-ini" name="ent-ini">
+            <span>A</span>
+            <input type="date" class="form-control" id="ent-fin" name="ent-fin">
+          </div>
+          <small class="form-text text-muted">Productos</small>
+          <div class="form-group d-flex align-items-center">
+            <input class="form-check-input" type="checkbox" id="pdts">
+            <select class="form-select" id="pdts-sel" name="pdts-sel">
+              <option></option>
+              {% for p in productos %}
+              <option value="{{ p.id }}">{{ p.clave }}</option>
+              {% endfor %}
+            </select>
+          </div>
+          <small class="form-text text-muted">Usuarios</small>
+          <div class="form-group d-flex align-items-center">
+            <input class="form-check-input" type="checkbox" id="usrs">
+            <select class="form-select" id="usrs-sel" name="usrs-sel">
+              <option></option>
+              {% for u in usuarios %}
+              <option value="{{ u.id }}">{{ u.nombre }}</option>
+              {% endfor %}
+            </select>
+          </div>
+          <button type="submit" class="btn btn-dark">Enviar</button>
+        </fieldset>
+      </form>
+    </div>
+    <div class="tab card mt-2" id="salidas">
+      <form action="{{ url_for('dashboard.inventario') }}" method="POST" id="form-salidas">
+        <fieldset>
+          <legend>Entradas</legend>
+          <small class="form-text text-muted">Fecha de salida</small>
+          <div class="form-group d-flex align-items-center">
+            <input class="form-check-input" type="checkbox" id="ent">
+            <input type="date" class="form-control" id="sal-ini" name="sal-ini">
+            <span>A</span>
+            <input type="date" class="form-control" id="sal-fin" name="sal-fin">
+          </div>
+          <small class="form-text text-muted">Productos</small>
+          <div class="form-group d-flex align-items-center">
+            <input class="form-check-input" type="checkbox" id="pdts">
+            <select class="form-select" id="pdts-sel" name="pdts-sel">
+              <option></option>
+              {% for p in productos %}
+              <option value="{{ p.id }}">{{ p.clave }}</option>
+              {% endfor %}
+            </select>
+          </div>
+          <small class="form-text text-muted">Usuarios</small>
+          <div class="form-group d-flex align-items-center">
+            <input class="form-check-input" type="checkbox" id="usrs">
+            <select class="form-select" id="usrs-sel" name="usrs-sel">
+              <option></option>
+              {% for u in usuarios %}
+              <option value="{{ u.id }}">{{ u.nombre }}</option>
+              {% endfor %}
+            </select>
+          </div>
+          <button type="submit" class="btn btn-dark">Enviar</button>
+        </fieldset>
+      </form>
+    </div>
+    <div class="tab card mt-2" id="fisico">
+      <p>seccion 3</p>
+    </div>
   </div>
-  {% if productos %}
-    {% for p in productos %}
-      <div class="card row m-2 p-4">
-        <h3><a href="#">{{p.clave}}</a></h3>
-        <p>{{p}}</p>
-      </div>
-    {% endfor %}
-  {% endif %}
-</div>
 {% endblock %}

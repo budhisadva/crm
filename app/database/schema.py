@@ -7,6 +7,8 @@ instructions = [
     'drop table if exists Producto;',
     'drop table if exists Cliente;',
     'drop table if exists Cotizacion;',
+    'drop table if exists Pedimiento;',
+    'drop table if exists ListaProductoPedimiento;',
     'SET FOREIGN_KEY_CHECKS = 1;',
     """
     create table TipoCliente(
@@ -94,6 +96,24 @@ instructions = [
         foreign key(marcaId) references Marca(id),
         foreign key(mercadoId) references Mercado(id),
         foreign key(clienteId) references Cliente(id)
+    );
+    """,
+    """
+    create table Pedimiento(
+        id int not null auto_increment,
+        identificador text,
+        fecha text,
+        primary key (id)
+    );
+    """,
+    """
+    create table ListaProductoPedimiento(
+        id int not null auto_increment,
+        pedimientoId int,
+        productoId int,
+        foreign key(pedimientoId) references Pedimiento(id),
+        foreign key(productoId) references Producto(id),
+        primary key (id)
     );
     """
     ]

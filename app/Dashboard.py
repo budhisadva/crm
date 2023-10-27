@@ -1,8 +1,6 @@
 from flask import (
 Blueprint, render_template, request, flash, url_for, redirect
 )
-from app.Producto import *
-from app.Cliente import *
 from app.database.db import get_db
 from app.gestorBD import *
 
@@ -34,7 +32,7 @@ def clientes(n):
     return render_template('clientes/paginado.html', **contexto)
 
 
-@bp.route('/add_clt/', methods=['GET', 'POST'])
+@bp.route('/clientes/add_clt/', methods=['GET', 'POST'])
 def nuevoCliente():
     contexto = dict()
     if request.method == 'GET':
@@ -46,7 +44,7 @@ def nuevoCliente():
         flash('Cliente agregado correctamente')
         return redirect(url_for('dashboard.clientes', n=1))
 
-@bp.route('/edit_clt/<string:id>', methods=['GET', 'POST'])
+@bp.route('/clientes/edit_clt/<string:id>', methods=['GET', 'POST'])
 def editaCliente(id):
     contexto = dict()
     if request.method == 'GET':
@@ -59,9 +57,9 @@ def editaCliente(id):
         flash('Cliente actualizado correctamente')
         return redirect(url_for('dashboard.clientes', n=1))
 
-@bp.route('/delete_clt/<string:id>', methods=['GET'])
+@bp.route('/clientes/delete_clt/<string:id>', methods=['GET'])
 def borraCliente(id):
-    delete(tabla='Cliente', id=id)
+    # delete(tabla='Cliente', id=id)
     flash('Cliente eliminado correctamente')
     return redirect(url_for('dashboard.clientes', n=1))
 # --------------------------------------------------
@@ -86,7 +84,7 @@ def productos(n):
             return render_template('productos/productos.html', **contexto)
     return render_template('productos/paginado.html', **contexto)
 
-@bp.route('/add_pdt/', methods=['GET', 'POST'])
+@bp.route('/productos/add_pdt/', methods=['GET', 'POST'])
 def nuevoProducto():
     contexto = dict()
     if request.method == 'GET':
@@ -98,7 +96,7 @@ def nuevoProducto():
         return redirect(url_for('dashboard.productos', n=1))
 
 
-@bp.route('/edit_pdt/<string:id>', methods=['GET', 'POST'])
+@bp.route('/productos/edit_pdt/<string:id>', methods=['GET', 'POST'])
 def editaProducto(id):
     contexto = dict()
     if request.method == 'GET':
@@ -111,9 +109,9 @@ def editaProducto(id):
         flash('Producto actualizado correctamente')
         return redirect(url_for('dashboard.productos', n=1))
 
-@bp.route('/delete_pdt/<string:id>', methods=['GET'])
+@bp.route('/productos/delete_pdt/<string:id>', methods=['GET'])
 def borraProducto(id):
-    delete(tabla='Producto', id=id)
+    # delete(tabla='Producto', id=id)
     flash('Producto eliminado correctamente')
     return redirect(url_for('dashboard.productos', n=1))
 # -----------------------------------------------------#
@@ -143,23 +141,6 @@ def borraUsuario(id):
     # delete(tabla='Usuario', id=id)
     flash('Usuario eliminado correctamente')
     return redirect(url_for('dashboard.usuarios'))
-# ------------------------
-# ---- Inventarios -------
-# ------------------------
-@bp.route('/inventario/', methods=['GET'])
-def inventario():
-    contexto = dict()
-    if len(request.args) < 2:
-        pass
-    else:
-        if request.args.get('busqueda') != '':
-            contexto['productos'] = selectAllBusqueda(tabla='Producto', atr=request.args.get('categoria'), arg=request.args.get('busqueda'), ord=True)
-        else:
-            return redirect(url_for('dashboard.inventario'))
-    return render_template('inventario/inventario.html', **contexto)
-
-@bp.route('', methods=['GET'])
-
 # --------------------------------------------------
 # ------------------Cotizaciones--------------------
 # --------------------------------------------------
@@ -170,15 +151,38 @@ def cotizaciones():
 
 @bp.route('/add_cot/', methods=['GET', 'POST'])
 def nuevaCotizacion():
+        return redirect(url_for('dashboard.cotizaciones'))
+# ------------------------
+# ---- Inventarios -------
+# ------------------------
+@bp.route('/inventario/', methods=['GET', 'POST'])
+def inventario():
+    contexto = dict()
+    contexto['productos'] = selectAll(tabla='Producto')
+    contexto['usuarios'] = selectAll(tabla='Usuario')
     if request.method == 'GET':
-        contexto = dict(marcas = selectAll('Marca'),
-                        mercados = selectAll('Mercado'))
-        print('#############################')
-        print('Argumentos: ', request.args)
-        print('#############################')
-        print('Formulario: ', request.form)
-        print('#############################')
-        return render_template('pagina/add_cot.html', contexto=contexto)
+        return render_template('inventario/inventario.html', **contexto)
     else:
         print(request.form)
-        return redirect(url_for('dashboard.cotizaciones'))
+        return redirect(url_for('dashboard.inventario'))
+
+@bp.route('/inventario/add_entrada/', methods=['GET', 'POST'])
+def nuevaEntrada():
+    contexto=dict()
+    if request.method == 'GET':
+        if len(request.args) != 0:
+            contexto['bandera'] = True
+            contexto['bandera2'] = True
+            return render_template('inventario/add_ent.html', **contexto)
+        else:
+            return render_template('inventario/add_ent.html')
+    else:
+        insert(tabla='Pedimiento', datos=request.form.copy())
+        contexto['productos'] = selectAll(tabla='Producto')
+        contexto['bandera'] = True
+        return render_template('inventario/add_ent.html', **contexto)
+
+@bp.route('/inventario/final_ent/', methods=['GET', 'POST'])
+def temp():
+    print(request.form)
+    return redirect(url_for('dashboard.inventario'))
